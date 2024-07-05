@@ -54,16 +54,33 @@ tasks.withType<Test> {
 }
 
 extra["snippetsDir"] = file("build/generated-snippets")
+extra["docsOutputDir"] = file("build/docs/asciidoc")
+extra["projectDocsDir"] = file("src/main/resources/static/docs")
 
 tasks.bootBuildImage {
     builder.set("paketobuildpacks/builder-jammy-base:latest")
 }
 
+tasks.bootJar {
+    dependsOn(tasks.asciidoctor)
+}
+
 tasks.test {
+    doFirst { delete(project.extra["snippetsDir"]!!) }
     outputs.dir(project.extra["snippetsDir"]!!)
 }
 
 tasks.asciidoctor {
+    doFirst {
+        delete(project.extra["docsOutputDir"]!!)
+        delete(project.extra["projectDocsDir"]!!)
+    }
     inputs.dir(project.extra["snippetsDir"]!!)
     dependsOn(tasks.test)
+    doLast {
+        copy {
+            from(project.extra["docsOutputDir"]!!)
+            into(project.extra["projectDocsDir"]!!)
+        }
+    }
 }
