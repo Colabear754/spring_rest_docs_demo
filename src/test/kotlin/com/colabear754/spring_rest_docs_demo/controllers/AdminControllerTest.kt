@@ -15,6 +15,8 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpHeaders
+import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
+import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.operation.preprocess.Preprocessors.modifyHeaders
 import org.springframework.restdocs.payload.JsonFieldType
@@ -67,6 +69,7 @@ class AdminControllerTest @Autowired constructor(
                 "admin/members",
                 requestPreprocessor(modifyHeaders().set(HttpHeaders.AUTHORIZATION, "Bearer {access_token}")),
                 responsePreprocessor(),
+                requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")),
                 memberInfoResponseSnippet
             )
         ) }
@@ -97,6 +100,7 @@ class AdminControllerTest @Autowired constructor(
                 "admin/admins",
                 requestPreprocessor(modifyHeaders().set(HttpHeaders.AUTHORIZATION, "Bearer {access_token}")),
                 responsePreprocessor(),
+                requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")),
                 memberInfoResponseSnippet
             )
         ) }

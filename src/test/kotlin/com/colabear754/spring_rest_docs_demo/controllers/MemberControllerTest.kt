@@ -18,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
+import org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.operation.preprocess.Preprocessors.modifyHeaders
 import org.springframework.restdocs.payload.JsonFieldType
@@ -69,6 +71,7 @@ class MemberControllerTest @Autowired constructor(
                 "member/info",
                 requestPreprocessor(modifyHeaders().set(HttpHeaders.AUTHORIZATION, "Bearer {access_token}")),
                 responsePreprocessor(),
+                requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")),
                 responseFields(
                     fieldWithPath("status").description("응답 상태"),
                     fieldWithPath("message").description("응답 메시지").type(JsonFieldType.STRING).optional(),
@@ -105,6 +108,7 @@ class MemberControllerTest @Autowired constructor(
                 "member/delete",
                 requestPreprocessor(modifyHeaders().set(HttpHeaders.AUTHORIZATION, "Bearer {access_token}")),
                 responsePreprocessor(),
+                requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")),
                 responseFields(
                     fieldWithPath("status").description("응답 상태"),
                     fieldWithPath("message").description("응답 메시지").type(JsonFieldType.STRING).optional(),
@@ -143,6 +147,7 @@ class MemberControllerTest @Autowired constructor(
                 "member/update",
                 requestPreprocessor(modifyHeaders().set(HttpHeaders.AUTHORIZATION, "Bearer {access_token}")),
                 responsePreprocessor(),
+                requestHeaders(headerWithName(HttpHeaders.AUTHORIZATION).description("인증 토큰")),
                 requestFields(
                     fieldWithPath("password").description("비밀번호"),
                     fieldWithPath("newPassword").description("새로운 비밀번호").type(JsonFieldType.STRING).optional(),
